@@ -17,59 +17,65 @@ const slides = [
     tagLine: "Autocollants <span>avec découpe laser sur mesure</span>",
   },
 ];
-//je recupere ma balise image par sa class
-let bannerImg = document.querySelector(".banner-img");
-// je cree une variable => substring() pour extraire le nom de fichier de l’image à partir de son URL.
-let bannerImgName = bannerImg.src.substring(
-  // et je recuper l'index à partir de la derniere occurence => /
-  bannerImg.src.lastIndexOf("/") + 1,
-  bannerImg.src.length
-);
-// je cree ma boucle pour integré les bullets
-for (let i = 0; i < slides.length; i++) {
-  //je cree une nouvelle balise
-  let baliseDot = document.createElement("div");
-  // je lui cree une class
-  baliseDot.classList.add("dot");
 
-  //j'integre ma nouvelle balise a son parent
-  let baliseDots = document.querySelector(".dots");
-  baliseDots.appendChild(baliseDot);
-  // si dot sur image alors dot = dot_selected
-
-  if (bannerImgName === slides[i].image) {
-    baliseDot.classList.add("dot_selected");
-  }
-}
-
-// j'Ajoute un index pour suivre l'image actuelle
+// je recupere l'index du tableau slides et je l'nitialise
 let slidesIndex = 0;
 
-let flechDeDroite = document.querySelector(".arrow_right");
-//j'ajoute un evenement qd je clique sur ma fleche de droite
-flechDeDroite.addEventListener("click", function () {
-  // Supprime la boucle for, elle n'est plus nécessaire
-  for (slidesIndex.length = 0; slidesIndex.length < 3; slidesIndex.length++);
+//je recupère l'element du DOM banner img
+let slideImg = document.querySelector(".banner-img");
+
+//et je recupère l'element de ma tag line
+let slideTagLine = document.querySelector("#banner p");
+
+// je recupère la fleche de droite
+let flecheDeDroite = document.querySelector(".arrow_right");
+
+//je crée une fonction pour mettre a jour l'image et le text de mon carrousel
+function slider() {
+  slideImg.src = slides[slidesIndex].image;
+  slideTagLine.innerHTML = slides[slidesIndex].tagLine;
+}
+
+// je mets un evenement sur ma fleche au click
+flecheDeDroite.addEventListener("click", function () {
+  /*je suprime la boucle de l'etapes 3 pour pourvoir affiche mon carrousel sans erreur 
+  for (slidesIndex.length = 0; slidesIndex.length < 3; slidesIndex.length++);*/
+
+  //j'incremente de 1 les elements du tableau slides
   slidesIndex++;
 
-  console.log("slidesIndex: ", slidesIndex);
-  console.log("Current image: ", slides[slidesIndex].image);
-  console.log("Vous avez cliqué sur la fleche de droite");
-  // Mettez à jour l'image et le texte
-  bannerImg.src = slides[slidesIndex].image;
-  //je selectionne la tag line de mon dossier html
-  let tagLineElement = document.querySelector("#banner p");
-  //je mets à jour le tag line de mon element <p> en utilisant le texte de la diapositive actuelle
-  tagLineElement.innerHTML = slides[slidesIndex].tagLine;
-  console.log(slides[slidesIndex].image);
-
-  // je Mets à jour les dots
-  let dots = document.querySelectorAll(".dot");
-  for (let i = 0; i < dots.length; i++) {
-    dots[i].classList.remove("dot_selected"); // je Supprime la classe de tous les dots
-    if (i === slidesIndex) {
-      // Si c'est le dot actuel, ajoutez la classe
-      dots[i].classList.add("dot_selected");
-    }
+  //je fais une conditions a la place de ma boucle, si mon tableau arrive a la fin il revient au debut
+  if (slidesIndex >= slides.length) {
+    slidesIndex = 0;
   }
+  slider();
+  console.log("Vous avez cliqué sur flecheDeDroite");
 });
+
+//je mets un événements au click sur la flèche de gauche
+let flecheDeGauche = document.querySelector(".arrow_left");
+flecheDeGauche.addEventListener("click", function () {
+  //je fais la meme condition que la fleche de droite mais je decremente cette fois ci
+  slidesIndex--;
+  if (slidesIndex < 0) {
+    slidesIndex = slides.length - 1;
+  }
+  slider();
+  console.log("Vous avez cliqué sur flecheDeGauche");
+});
+
+//initialiser le carrousel
+slider();
+
+//je ccrée une bouclepour afficher mes bulles
+for (i = 0; i < slides.length; i++) {
+  //je crée un ediv pour contenir mes bulles
+  let baliseDot = document.createElement("div");
+  baliseDot.classList.add("dot");
+  let baliseDots = document.querySelector(".dots");
+  baliseDots.appendChild(baliseDot);
+  //je crée la class dot_selected pour se positionner dans le carrousel
+  let dotActive = document.querySelector(".dot");
+  dotActive.classList.add("dot_selected");
+  // si je passe a la prochaine image dot_selected change de position
+}

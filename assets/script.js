@@ -21,23 +21,11 @@ const slides = [
 // J'nitialise le tableau slides pour recuperer ses index
 let slidesIndex = 0;
 
-//je recupère l'element du DOM banner img
-let slideImg = document.querySelector(".banner-img");
-
-//et je recupère l'element de ma tag line
-let slideTagLine = document.querySelector("#banner p");
-
 // je recupère la fleche de droite
-let flecheDeDroite = document.querySelector(".arrow_right");
-
-//je crée une fonction pour mettre a jour l'image et le text de mon carrousel
-function carrousel() {
-  slideImg.src = slides[slidesIndex].image;
-  slideTagLine.innerHTML = slides[slidesIndex].tagLine;
-}
+let rightArrow = document.querySelector(".arrow_right");
 
 // je mets un evenement sur ma fleche au click
-flecheDeDroite.addEventListener("click", function () {
+rightArrow.addEventListener("click", function () {
   /*je suprime la boucle de l'etapes 3 pour pourvoir affiche mon carrousel sans erreur 
   for (slidesIndex.length = 0; slidesIndex.length < 3; slidesIndex.length++);*/
 
@@ -51,14 +39,13 @@ flecheDeDroite.addEventListener("click", function () {
     slidesIndex = 0;
   }
   //j'integre mes fonctions pour qu'elles se mettent en place au click
-  carrousel();
-  dotsCarrousel();
-  console.log("Vous avez cliqué sur flecheDeDroite");
+  changeCarouselItems();
+  updateDotCarousel();
 });
 
 //je mets un événements au click sur la flèche de gauche
-let flecheDeGauche = document.querySelector(".arrow_left");
-flecheDeGauche.addEventListener("click", function () {
+let leftArrow = document.querySelector(".arrow_left");
+leftArrow.addEventListener("click", function () {
   //je fais la meme condition que la fleche de droite mais je decremente cette fois ci
   slidesIndex--;
   // Si je dépasse le début du tableau
@@ -67,9 +54,8 @@ flecheDeGauche.addEventListener("click", function () {
     slidesIndex = slides.length - 1;
   }
   //j'integre mes fonctions pour qu'elles se mettent en place au click
-  carrousel();
-  dotsCarrousel();
-  console.log("Vous avez cliqué sur flecheDeGauche");
+  changeCarouselItems();
+  updateDotCarousel();
 });
 
 //je ccrée une boucle pour afficher mes bulles
@@ -79,19 +65,30 @@ for (i = 0; i < slides.length; i++) {
   baliseDot.classList.add("dot");
   let baliseDots = document.querySelector(".dots");
   baliseDots.appendChild(baliseDot);
-  /*//je crée la class dot_selected pour se positionner dans le carrousel
-  let dotActive = document.querySelector(".dot");
-  dotActive.classList.add("dot_selected");*/
+  //je crée la class dot_selected pour se positionner dans le carrousel
+  let dotSelected = document.querySelector(".dot");
+  dotSelected.classList.add("dot_selected");
 }
-function dotsCarrousel() {
+
+//je crée une fonction pour mettre a jour l'image et le text de mon carrousel
+function changeCarouselItems() {
+  //je recupère l'element du DOM banner img
+  let slideImg = document.querySelector(".banner-img");
+
+  //et je recupère l'element de ma tag line
+  let slideTagLine = document.querySelector("#banner p");
+  //changer le nom
+  slideImg.src = slides[slidesIndex].image;
+  slideTagLine.innerHTML = slides[slidesIndex].tagLine;
+}
+
+function updateDotCarousel() {
   // je recupere tout les dot
+  let dot = document.querySelector(".dot_selected");
+
+  dot.classList.remove("dot_selected");
+
   let dots = document.querySelectorAll(".dot");
-
-  //boucle pour que modifier la class dot => dot selected
-  for (let i = 0; i < dots.length; i++) {
-    dots[i].classList.remove("dot_selected");
-  }
-
-  //je crée la class dot-selected
+  // j'Ajoute la classe "dot-selected" au point correspondant à l'image actuelle
   dots[slidesIndex].classList.add("dot_selected");
 }
